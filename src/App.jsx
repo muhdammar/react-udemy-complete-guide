@@ -1,8 +1,8 @@
-import Post from "./components/Post";
+import PostsList from "./components/PostsList";
 function App() {
   return (
     <>
-      <Post author="Ammar" body="Course Financial"/>
+    <PostsList />
     </>
   );
 }
