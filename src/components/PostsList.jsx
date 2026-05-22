@@ -7,6 +7,13 @@ import Modal from "./Modal";
 function PostsList({ isPosting, onStopPosting }) {
   const [posts, setPosts] = useState([]);
   function addPostHandler(postData) {
+    fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     //setPosts([postData, ...posts]) //what different tho, later ask AI
     setPosts((existingPosts) => [postData, ...existingPosts]);
   }
