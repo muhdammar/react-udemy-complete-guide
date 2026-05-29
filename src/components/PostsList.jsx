@@ -13,20 +13,21 @@ function PostsList({ isPosting, onStopPosting }) {
   //and refetch again
 
   const [posts, setPosts] = useState([]);
-  const [ isLoading, setIsLoading] = useState(false);
+  const [ isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPosts(){
+   async function fetchPosts(){
+      setIsLoading(true);
       const response = await fetch("http://localhost:8080/posts");
       const resData = await response.json();
+      console.log(resData);
       if(!response.ok) {
         throw new Error(resData.message || "Something went wrong");
       }
       setPosts(resData.posts)
-      setIsLoading(true);
+      setIsLoading(false);
     }
     fetchPosts();
-    setIsLoading(false);
   }, []);
 
   function addPostHandler(postData) {
