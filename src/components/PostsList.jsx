@@ -13,19 +13,20 @@ function PostsList({ isPosting, onStopPosting }) {
   //and refetch again
 
   const [posts, setPosts] = useState([]);
+  const [ isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function fetchPosts(){
-      const response = await fetch("http://localhost:8080/posts")
-            .then((response) => response.json())
-            .then((data) => {
-              setPosts(data.posts);
-            });
+      const response = await fetch("http://localhost:8080/posts");
       const resData = await response.json();
+      if(!response.ok) {
+        throw new Error(resData.message || "Something went wrong");
+      }
       setPosts(resData.posts)
+      setIsLoading(true);
     }
     fetchPosts();
-
+    setIsLoading(false);
   }, []);
 
   function addPostHandler(postData) {
@@ -46,14 +47,15 @@ function PostsList({ isPosting, onStopPosting }) {
           <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
         </Modal>
       ) : null}
-      {posts.length > 0 && (
+      {!isLoading && posts.length > 0 && (
         <ul className={classes.posts}>
           {posts.map((post) => (
             <Post key={post.body} author={post.author} body={post.body} />
           ))}
         </ul>
       )}
-      {posts.length === 0 && <div> No data la bro </div>}
+      {!isLoading && posts.length === 0 && <div> No data la bro </div>}
+      {isLoading && <div> Loading... </div>}
     </>
   );
 }
